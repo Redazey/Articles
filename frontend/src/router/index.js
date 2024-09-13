@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ArticlesView from '../views/ArticlesView.vue'
 
 const router = createRouter({
-	history: createWebHistory(import.meta.env.BASE_URL),
+	history: createWebHistory(),
 	routes: [
 		{
 			path: '/',
@@ -10,15 +11,15 @@ const router = createRouter({
 			component: HomeView
 		},
 		{
-			path: '/article/create',
+			path: '/article',
 			name: 'CreateArticle',
-			component: ArticleForm,
+			component: ArticlesView,
 		},
-		{
-			path: '/article/edit/:id',
-			name: 'EditArticle',
-			component: ArticleForm,
-		},
+        {
+			path: '/article/:id',
+			name: 'CreateArticle',
+			component: ArticlesView,
+		}
 	]
 })
 

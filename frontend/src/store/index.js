@@ -1,61 +1,169 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+// store.js
+import { createStore } from 'vuex';
 import axios from 'axios';
 
-Vue.use(Vuex);
+export default createStore({
+	state: {
+		// ARTICLES
+		articles: [],
+		currentArticle: null,
 
-export default new Vuex.Store({
-    state: {
-        articles: [],
-        currentArticle: null,
-    },
+		// COMMENTS
+		commentsFromPeriod: [],
+		comments: [],    
+		currentComment: null,
+	},
 
-    mutations: {
-        SET_ARTICLES(state, articles) {
-            state.articles = articles;
-        },
-        SET_CURRENT_ARTICLE(state, article) {
-            state.currentArticle = article;
-        },
-        ADD_ARTICLE(state, article) {
-            state.articles.push(article);
-        },
-        UPDATE_ARTICLE(state, updatedArticle) {
-            const index = state.articles.findIndex(a => a.id === updatedArticle.id);
-            if (index !== -1) {
-                Vue.set(state.articles, index, updatedArticle);
-            }
-        },
-    },
+	getters: {
+		ARTICLES: state => {
+			return state.articles;
+		},
+		CURRENT_ARTICLE: state => {
+			return state.currentArticle;
+		},
+		COMMENTS: state => {
+			return state.comments;
+		},
+		CURRENT_COMMENT: state => {
+			return state.currentComment;
+		},
+		COMMENTS_FROM_PERIOD: state => {
+			return state.commentsFromPeriod;
+		},
+	},
 
-    actions: {
+	mutations: {
+		// ARTICLES
+		SET_ARTICLES: (state, articles) => {
+			state.articles = articles;
+		},
+		SET_CURRENT_ARTICLE: (state, article) => {
+			state.currentArticle = article;
+		},
+		ADD_ARTICLE: (state, article) => {
+			state.articles.push(article);
+		},
+		UPDATE_ARTICLE: (state, article) => {
+			const index = state.articles.findIndex(a => a.id === article.id);
+			if (index !== -1) {
+				state.articles[index] = article;
+			}
+		},
+		DELETE_ARTICLE: (state, id) => {
+			state.articles = state.articles.filter(article => article.id !== id);
+		},
 
-        fetchArticles({ commit }) {
-        axios.get('/articles')
-            .then(response => {
-                commit('SET_ARTICLES', response.data);
-            });
-        },
+		// COMMENTS
+		SET_COMMENTS: (state, comments) => {
+			state.comments = comments;
+		},
+		SET_CURRENT_COMMENT(state, comment) {
+			state.currentComment = comment;
+		},
+		ADD_COMMENT(state, comment) {
+			state.comments.push(comment);
+		},
+		UPDATE_COMMENT(state, updatedComment) {
+			const index = state.comments.findIndex(c => c.id === updatedComment.id);
+			if (index !== -1) {
+					state.comments[index] = updatedComment;
+			}
+		},
+		DELETE_COMMENT(state, id) {
+			state.comments = state.comments.filter(comment => comment.id !== id);
+		},
+		SET_COMMENTS_FROM_PERIOD(state, comments) {
+			state.commentsFromPeriod = comments;
+		},
+	},
 
-        fetchArticle({ commit }, id) {
-        axios.get(`/article/${id}`)
-            .then(response => {
-                commit('SET_CURRENT_ARTICLE', response.data);
-            });
-        },
+	actions: {
+		// ARTICLES
+		FETCH_ARTICLES: async(context) => {
+			try {
+				console.log("bug");
+				let { data } = await axios.get('http://localhost:5000/articles')
+				context.commit('SET_ARTICLES', data);
+			} catch (error) {
+				console.error(error);
+			}
+		},
 
-        createArticle({ commit }, article) {
-        return axios.post('/article', article)
-            .then(response => {
-                commit('ADD_ARTICLE', response.data);
-            });
-        },
+		FETCH_ARTICLE: async(context, payload, id) => {
+			try {
+				let { data } = await axios.get(`http://localhost:5000/article/${id}`)
+				commit('SET_CURRENT_ARTICLE', data);
+			} catch (error) {
+				console.error(error);
+			}
+		},
 
-        updateArticle({ commit }, article) {
-        return axios.put(`/article/${article.id}`, article)
-            .then(response => {
-                commit('UPDATE_ARTICLE', response.data);
-            });
-        },
-    },
+		CREATE_ARTICLE: async(context, article) => {
+			try {
+				let { data } = await axios.post('http://localhost:5000/article', article);
+				context.commit('ADD_ARTICLE', data);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+		UPDATE_ARTICLE: async(context, article) =>{
+			try {
+				let { data } = await axios.put(`http://localhost:5000/article/${article.id}`, article);
+				commit('UPDATE_ARTICLE', data);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+		// COMMENTS
+		FETCH_COMMENTS: async (context, articleId) => {
+			try {
+					let { data } = await axios.get(`http://http://localhost:5000/article/${articleId}/comments`);
+					context.commit('SET_COMMENTS', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+		FETCH_COMMENT: async (context, { articleId, commentId }) => {
+			try {
+					let { data } = await axios.get(`http://localhost:5000/article/${articleId}/comment/${commentId}`);
+					context.commit('SET_CURRENT_COMMENT', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+		CREATE_COMMENT: async (context, { articleId, comment }) => {
+			try {
+					let { data } = await axios.post(`http://localhost:5000/article/${articleId}/comment`, comment);
+					context.commit('ADD_COMMENT', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+		UPDATE_COMMENT: async (context, { articleId, comment }) => {
+			try {
+					let { data } = await axios.put(`http://localhost:5000/article/${articleId}/comment/${comment.id}`, comment);
+					context.commit('UPDATE_COMMENT', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+		DELETE_COMMENT: async (context, { articleId, commentId }) => {
+			try {
+					await axios.delete(`http://localhost:5000/article/${articleId}/comment/${commentId}`);
+					context.commit('DELETE_COMMENT', commentId);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+		FETCH_COMMENTS_FROM_PERIOD: async (context, { startDate, endDate }) => {
+			try {
+					let { data } = await axios.get(`http://localhost:5000/analytic/comments/?startDate=${startDate}&endDate=${endDate}`);
+					context.commit('SET_COMMENTS_FROM_PERIOD', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+	},
 });
