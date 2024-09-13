@@ -2,17 +2,9 @@
 const {
     Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-    class comments extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            comments.belongsTo(models.arcticles, { foreignKey: 'articleId' });
-        }
-    }
+    class comments extends Model {}
     comments.init({
         content: {
             type: DataTypes.TEXT,
