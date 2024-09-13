@@ -95,6 +95,6 @@ exports.deleteComment = async (req, res) => {
 
         res.status(204);
     } catch (error) {
-        return res.status(500).json(message.error);
+        return res.status(500).json({ error: error.message });
     }
 }

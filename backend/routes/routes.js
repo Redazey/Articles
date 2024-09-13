@@ -15,6 +15,10 @@ const {
     deleteComment
 } = require('../controllers/commentController.js');
 
+const {
+    commentsFromPeriod
+} = require('../controllers/analyticController.js');
+
 const router = express.Router();
 
 // Articles
@@ -30,5 +34,8 @@ router.get('/article/:id/comment/:id', getCommentById);
 router.get('/article/:id/comments', getAllComments);
 router.put('/article/:id/comment/:id', updateComment);
 router.delete('/article/:id/comment/:id', deleteComment);
+
+// Analytic
+router.get('/analytic/comments/', commentsFromPeriod);
 
 module.exports = router;
