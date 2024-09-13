@@ -1,4 +1,4 @@
-const { Article, Comment } = require('../models');
+const { Comment } = require('../models');
 const { Sequelize } = require('sequelize');
 
 // Создание статьи
@@ -7,7 +7,7 @@ exports.commentsFromPeriod = async (req, res) => {
     const { dateFrom, dateTo } = req.query;
 
     if (!dateFrom || !dateTo) {
-    return res.status(400).json({ error: 'Both dateFrom and dateTo are required.' });
+        return res.status(400).json({ error: 'Both dateFrom and dateTo are required.' });
     }
 
     try {
@@ -18,17 +18,13 @@ exports.commentsFromPeriod = async (req, res) => {
             return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DDTHH:mm:ss.' });
         }
     
-        const articlesWithComments = await Article.findAll({
-            include: [
-                {
-                    model: Comment,
-                    where: {
-                        createdAt: {
-                            [Sequelize.Op.between]: [parsedDateFrom, parsedDateTo]
-                        }
-                    }
-                }
-            ],
+        const articlesWithComments = await Comment.findAll({
+            where: {
+                createdAt: {
+                    [Sequelize.Op.between]: [parsedDateFrom, parsedDateTo]
+                },
+                articleId: req.params.id
+            },
             order: [['createdAt', 'ASC']]
         });
     

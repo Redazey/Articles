@@ -56,6 +56,12 @@
 </script>
 
 <style scoped>
+    .comment-form {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        max-width: 400px;
+    }
     .form-column {
         display: flex;
         flex-direction: column;

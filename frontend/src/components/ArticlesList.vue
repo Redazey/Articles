@@ -15,6 +15,7 @@
         </tr>
         </tbody>
     </table>
+    <RouterLink to="/new-article">Написать статью</RouterLink>
 </template>
 
 <script>

@@ -49,8 +49,8 @@ export default createStore({
 				state.articles[index] = article;
 			}
 		},
-		DELETE_ARTICLE: (state, id) => {
-			state.articles = state.articles.filter(article => article.id !== id);
+		DELETE_ARTICLE: (state) => {
+			state.currentArticle = null;
 		},
 
 		// COMMENTS
@@ -69,11 +69,16 @@ export default createStore({
 				state.comments[index] = updatedComment;
 			}
 		},
-		DELETE_COMMENT(state, id) {
-			state.comments = state.comments.filter(comment => comment.id !== id);
+		DELETE_COMMENT(state) {
+			state.currentComment = null;
 		},
+
+        // ANALYTIC
 		SET_COMMENTS_FROM_PERIOD(state, comments) {
 			state.commentsFromPeriod = comments;
+		},
+        DELETE_COMMENTS_FROM_PERIOD(state, id) {
+			state.commentsFromPeriod = [];
 		},
 	},
 
@@ -114,6 +119,14 @@ export default createStore({
 				console.error(error);
 			}
 		},
+        DELETE_ARTICLE: async (context, articleId) => {
+			try {
+					await axios.delete(`http://localhost:5000/article/${articleId}`);
+					context.commit('DELETE_ARTICLE');
+			} catch (error) {
+					console.error(error);
+			}
+		},
 
 		// COMMENTS
 		FETCH_COMMENTS: async (context, articleId) => {
@@ -151,15 +164,24 @@ export default createStore({
 		DELETE_COMMENT: async (context, { articleId, commentId }) => {
 			try {
 					await axios.delete(`http://localhost:5000/article/${articleId}/comment/${commentId}`);
-					context.commit('DELETE_COMMENT', commentId);
+					context.commit('DELETE_COMMENT');
 			} catch (error) {
 					console.error(error);
 			}
 		},
-		FETCH_COMMENTS_FROM_PERIOD: async (context, { startDate, endDate }) => {
+
+        // ANALYTIC
+		FETCH_COMMENTS_FROM_PERIOD: async (context, {articleId, dateFrom, dateTo }) => {
 			try {
-					let { data } = await axios.get(`http://localhost:5000/analytic/comments/?startDate=${startDate}&endDate=${endDate}`);
+					let { data } = await axios.get(`http://localhost:5000/analytic/${articleId}/comments/?dateFrom=${dateFrom}&dateTo=${dateTo}`);
 					context.commit('SET_COMMENTS_FROM_PERIOD', data);
+			} catch (error) {
+					console.error(error);
+			}
+		},
+        CLEAR_COMMENTS_FROM_PERIOD: async (context) => {
+			try {
+					context.commit('DELETE_COMMENTS_FROM_PERIOD');
 			} catch (error) {
 					console.error(error);
 			}

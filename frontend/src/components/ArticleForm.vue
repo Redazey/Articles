@@ -1,19 +1,13 @@
 <template>
-    <div class="article-form">
-        <h2>{{ formTitle }}</h2>
-        <form @submit.prevent="submitArticle">
-            <div class="form-group">
-                <label for="title">Заголовок:</label>
-                <input type="text" id="title" v-model="article.title" required>
-            </div>
-            <div class="form-group">
-                <label for="content">Содержание:</label>
-                <textarea id="content" v-model="article.content" required></textarea>
-            </div>
-            <div class="button-group">
-                <button type="submit" class="primary-button">Добавить</button>
-            </div>
-        </form>
+    <div class="edit-container">
+        <div class="edit-column">
+            <input type="text" v-model="article.title" placeholder="Заголовок" class="edit-input">
+            <textarea v-model="article.content" placeholder="Контент" class="edit-textarea"></textarea>
+        </div>
+        <div class="edit-buttons">
+            <button class="submit-button" @click="submitArticle">Сохранить</button>
+            <button class="submit-button" @click="clearForm">Отмена</button>
+        </div>
     </div>
 </template>
     
@@ -54,3 +48,42 @@ export default {
     }
 };
 </script>
+<style>
+.submit-button {
+    margin-right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+}
+
+.edit-input,
+.edit-textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+</style>

@@ -1,4 +1,5 @@
 const { Article, Comment } = require('../models');
+const url = require('url');
 
 // Создание комментария
 exports.createComment = async (req, res) => {
@@ -25,10 +26,15 @@ exports.createComment = async (req, res) => {
 // Получение комментария по ID
 exports.getCommentById = async (req, res) => {
     try {
+        const parsedUrl = url.parse(req.url);
+        const pathParts = parsedUrl.pathname.split('/');
+        
+        const commentId = pathParts[pathParts.length - 1];
+        const articleId = pathParts[pathParts.length - 3];
         const comment = await Comment.findOne({
             where: {
-                id: req.params.commentId,
-                articleId: req.params.id
+                id: commentId,
+                articleId: articleId
             }
         });
 
@@ -60,10 +66,15 @@ exports.getAllComments = async (req, res) => {
 // Обновление комментария
 exports.updateComment = async (req, res) => {
     try {
+        const parsedUrl = url.parse(req.url);
+        const pathParts = parsedUrl.pathname.split('/');
+        
+        const commentId = pathParts[pathParts.length - 1];
+        const articleId = pathParts[pathParts.length - 3];
         const comment = await Comment.findOne({
             where: {
-                id: req.params.commentId,
-                articleId: req.params.id
+                id: commentId,
+                articleId: articleId
             }
         });
 
@@ -82,10 +93,15 @@ exports.updateComment = async (req, res) => {
 // Удаление комментария
 exports.deleteComment = async (req, res) => {
     try {
+        const parsedUrl = url.parse(req.url);
+        const pathParts = parsedUrl.pathname.split('/');
+        
+        const commentId = pathParts[pathParts.length - 1];
+        const articleId = pathParts[pathParts.length - 3];
         const comment = await Comment.findOne({
             where: {
-                id: req.params.commentId,
-                articleId: req.params.id
+                id: commentId,
+                articleId: articleId
             }
         });
 

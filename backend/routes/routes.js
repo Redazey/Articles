@@ -36,6 +36,6 @@ router.put('/article/:id/comment/:id', updateComment);
 router.delete('/article/:id/comment/:id', deleteComment);
 
 // Analytic
-router.get('/analytic/comments/', commentsFromPeriod);
+router.get('/analytic/:id/comments/', commentsFromPeriod);
 
 module.exports = router;
