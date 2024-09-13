@@ -5,16 +5,22 @@ module.exports = {
     async up (queryInterface, Sequelize) {
         await queryInterface.bulkInsert('articles', [
             {
-                title: 'Статья 1',
-                text: 'Текст статьи 1',
-                created_at: new Date(),
-                updated_at: new Date(),
+                title: 'First Article',
+                content: 'This is the content of the first article.',
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
             {
-                title: 'Статья 2',
-                text: 'Текст статьи 2',
-                created_at: new Date(),
-                updated_at: new Date(),
+                title: 'Second Article',
+                content: 'This is the content of the second article.',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                title: 'Third Article',
+                content: 'This is the content of the third article.',
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         ]);
     },

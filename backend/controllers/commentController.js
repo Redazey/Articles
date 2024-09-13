@@ -1,15 +1,15 @@
-const {articles, comments} = requre('../models');
+const { Article, Comment } = require('../models');
 
 // Создание комментария
 exports.createComment = async (req, res) => {
     try {
-        const article = await articles.findByPk(req.params.id);
+        const article = await Article.findByPk(req.params.id);
 
         if (!article) {
             return res.status(404).json({ error: 'Article not found' });
         }
 
-        const comment = await comments.create({
+        const comment = await Comment.create({
             content: req.body.content,
             articleId: req.params.id
         });
@@ -23,7 +23,7 @@ exports.createComment = async (req, res) => {
 // Получение комментария по ID
 exports.getCommentById = async (req, res) => {
     try {
-        const comment = await comments.findOne({
+        const comment = await Comment.findOne({
             where: {
                 id: req.params.commentId,
                 articleId: req.params.id
@@ -34,7 +34,7 @@ exports.getCommentById = async (req, res) => {
             return res.status(404).json({ error: 'Comment not found' });
         }
 
-        res.status(202).json(comment);
+        res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -43,13 +43,13 @@ exports.getCommentById = async (req, res) => {
 // Получение всех комментариев для статьи
 exports.getAllComments = async (req, res) => {
     try {
-        const comments = await comments.findAll({
+        const comments = await Comment.findAll({
             where: {
                 articleId: req.params.id
             }
         });
 
-        res.status(203).json(comments);
+        res.status(200).json(comments);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -58,7 +58,7 @@ exports.getAllComments = async (req, res) => {
 // Обновление комментария
 exports.updateComment = async (req, res) => {
     try {
-        const comment = await comments.findOne({
+        const comment = await Comment.findOne({
             where: {
                 id: req.params.commentId,
                 articleId: req.params.id
@@ -71,7 +71,7 @@ exports.updateComment = async (req, res) => {
 
         await comment.update(req.body);
 
-        res.status(204).json(comment);
+        res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -80,7 +80,7 @@ exports.updateComment = async (req, res) => {
 // Удаление комментария
 exports.deleteComment = async (req, res) => {
     try {
-        const comment = await comments.findOne({
+        const comment = await Comment.findOne({
             where: {
                 id: req.params.commentId,
                 articleId: req.params.id
@@ -93,7 +93,7 @@ exports.deleteComment = async (req, res) => {
 
         comment.destroy()
 
-        res.status(205);
+        res.status(204);
     } catch (error) {
         return res.status(500).json(message.error);
     }

@@ -1,11 +1,11 @@
-const {articles, comments} = requre('../models');
+const { Article, Comment } = require('../models');
 
 // Создание статьи
 exports.createArticle = async (req, res) => {
     try {
-        const article = await articles.create(req.body)
+        const article = await Article.create(req.body)
 
-        res.status(201).json(article)
+        res.status(201).json(article);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -14,15 +14,15 @@ exports.createArticle = async (req, res) => {
 // Получение статьи по ID
 exports.getArticleById = async (req, res) => {
     try {
-        const article = await articles.findByPk(req.params.id, {
-            include: [comments]
+        const article = await Article.findByPk(req.params.id, {
+            include: [Comment]
         });
 
         if (!article) {
             return res.status(404).json({ error: 'Article not found' });
         }
 
-        res.status(202).json(article)
+        res.status(200).json(article);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -31,9 +31,9 @@ exports.getArticleById = async (req, res) => {
 // Получение всех статей
 exports.getAllArticles = async (req, res) => {
     try {
-        const articles = await articles.findAll();
+        const articles = await Article.findAll();
 
-        res.status(203).json(articles);
+        res.status(200).json(articles);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -42,7 +42,7 @@ exports.getAllArticles = async (req, res) => {
   // Обновление статьи
   exports.updateArticle = async (req, res) => {
     try {
-        const article = await articles.findByPk(req.params.id);
+        const article = await Article.findByPk(req.params.id);
 
         if (!article) {
             return res.status(404).json({ error: 'Article not found' });
@@ -50,7 +50,7 @@ exports.getAllArticles = async (req, res) => {
 
         await article.update(req.body);
 
-        res.status(203).json(article);
+        res.status(200).json(article);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -59,7 +59,7 @@ exports.getAllArticles = async (req, res) => {
   // Удаление статьи
   exports.deleteArticle = async (req, res) => {
     try {
-        const article = await articles.findByPk(req.params.id);
+        const article = await Article.findByPk(req.params.id);
 
         if (!article) {
             return res.status(404).json({ error: 'Article not found' });
@@ -67,7 +67,7 @@ exports.getAllArticles = async (req, res) => {
 
         await article.destroy();
 
-        res.status(204);
+        res.status(204).json();
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
