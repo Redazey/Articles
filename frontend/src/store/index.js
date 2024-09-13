@@ -66,7 +66,7 @@ export default createStore({
 		UPDATE_COMMENT(state, updatedComment) {
 			const index = state.comments.findIndex(c => c.id === updatedComment.id);
 			if (index !== -1) {
-					state.comments[index] = updatedComment;
+				state.comments[index] = updatedComment;
 			}
 		},
 		DELETE_COMMENT(state, id) {
@@ -81,7 +81,6 @@ export default createStore({
 		// ARTICLES
 		FETCH_ARTICLES: async(context) => {
 			try {
-				console.log("bug");
 				let { data } = await axios.get('http://localhost:5000/articles')
 				context.commit('SET_ARTICLES', data);
 			} catch (error) {
@@ -89,10 +88,10 @@ export default createStore({
 			}
 		},
 
-		FETCH_ARTICLE: async(context, payload, id) => {
+		FETCH_ARTICLE: async(context, id) => {
 			try {
 				let { data } = await axios.get(`http://localhost:5000/article/${id}`)
-				commit('SET_CURRENT_ARTICLE', data);
+				context.commit('SET_CURRENT_ARTICLE', data);
 			} catch (error) {
 				console.error(error);
 			}
@@ -110,7 +109,7 @@ export default createStore({
 		UPDATE_ARTICLE: async(context, article) =>{
 			try {
 				let { data } = await axios.put(`http://localhost:5000/article/${article.id}`, article);
-				commit('UPDATE_ARTICLE', data);
+				context.commit('UPDATE_ARTICLE', data);
 			} catch (error) {
 				console.error(error);
 			}
@@ -119,7 +118,7 @@ export default createStore({
 		// COMMENTS
 		FETCH_COMMENTS: async (context, articleId) => {
 			try {
-					let { data } = await axios.get(`http://http://localhost:5000/article/${articleId}/comments`);
+					let { data } = await axios.get(`http://localhost:5000/article/${articleId}/comments`);
 					context.commit('SET_COMMENTS', data);
 			} catch (error) {
 					console.error(error);

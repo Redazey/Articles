@@ -22,9 +22,7 @@ import {mapGetters} from 'vuex';
 
 export default {
     mounted() {
-        this.$store.dispatch('FETCH_ARTICLES').then(() => {
-            console.log(this.ARTICLES);
-        });
+        this.$store.dispatch('FETCH_ARTICLES');
     },
     computed : {
         ...mapGetters(['ARTICLES']),

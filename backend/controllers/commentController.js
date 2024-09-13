@@ -9,6 +9,8 @@ exports.createComment = async (req, res) => {
             return res.status(404).json({ error: 'Article not found' });
         }
 
+        console.log(req.body);
+
         const comment = await Comment.create({
             content: req.body.content,
             articleId: req.params.id

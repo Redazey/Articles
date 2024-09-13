@@ -8,9 +8,10 @@
     import ArticlesList from '../components/ArticlesList.vue';
 
     export default {
-    name: 'App',
-    components: {
-        ArticlesList
-    }
+        name: 'App',
+        components: {
+            ArticlesList
+        }
     };
 </script>
+
